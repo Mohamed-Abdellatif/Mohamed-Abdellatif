@@ -16,12 +16,15 @@
 
 {%- style -%}
   #GiftGuide-{{ section.id }} {
+    --gift-guide-top-bar-bg: {{ section.settings.top_bar_background_color }};
     --gift-guide-hero-bg: {{ section.settings.hero_background_color }};
     --gift-guide-hero-text: {{ section.settings.hero_text_color }};
     --gift-guide-announcement-bg: {{ section.settings.announcement_background_color }};
     --gift-guide-announcement-text: {{ section.settings.announcement_text_color }};
     --gift-guide-cta-bg: {{ section.settings.cta_background_color }};
     --gift-guide-cta-text: {{ section.settings.cta_text_color }};
+    --gift-guide-hero-btn-bg: {{ section.settings.hero_button_background_color }};
+    --gift-guide-hero-btn-text: {{ section.settings.hero_button_text_color }};
     --gift-guide-overlay: {{ section.settings.hover_overlay_color }};
     --gift-guide-overlay-opacity: {{ overlay_opacity }};
     --gift-guide-plus-color: {{ section.settings.plus_icon_color }};
@@ -32,11 +35,19 @@
 
 {% stylesheet %}
   .gift-guide {
+    background-color: #ffffff;
+    color: #121212;
+  }
+
+  .gift-guide__header {
     background-color: var(--gift-guide-hero-bg, #ffffff);
     color: var(--gift-guide-hero-text, #121212);
   }
 
   .gift-guide__top-bar {
+    position: relative;
+    z-index: 3;
+    background-color: var(--gift-guide-top-bar-bg, #ffffff);
     border-bottom: 1px solid rgba(18, 18, 18, 0.12);
   }
 
@@ -45,16 +56,16 @@
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 1.6rem;
-    min-height: 7rem;
-    padding-top: 1.6rem;
-    padding-bottom: 1.6rem;
+    min-height: 6.4rem;
+    padding-top: 1.4rem;
+    padding-bottom: 1.4rem;
   }
 
   .gift-guide__logo {
     display: flex;
     align-items: center;
     justify-self: start;
-    max-width: 14rem;
+    max-width: 18rem;
   }
 
   .gift-guide__logo-link {
@@ -67,126 +78,182 @@
     width: auto;
     height: auto;
     max-width: 100%;
-    max-height: 4.8rem;
+    max-height: 4rem;
     object-fit: contain;
   }
 
   .gift-guide__logo-text {
-    font-size: 1.8rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    color: inherit;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #121212;
     text-decoration: none;
+    text-transform: uppercase;
+    line-height: 1.2;
   }
 
   .gift-guide__top-text {
     margin: 0;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     line-height: 1.5;
     text-align: center;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
+    color: #121212;
   }
 
   .gift-guide__top-cta-wrap {
     justify-self: end;
   }
 
-  .gift-guide__announcement {
-    background-color: var(--gift-guide-announcement-bg, #121212);
-    color: var(--gift-guide-announcement-text, #ffffff);
-    border-bottom: 1px solid rgba(18, 18, 18, 0.12);
-  }
-
-  .gift-guide__announcement-text {
-    margin: 0;
-    padding: 1rem 0;
-    font-size: 1.1rem;
-    line-height: 1.4;
-    letter-spacing: 0.14em;
-    text-align: center;
-    text-transform: uppercase;
-  }
-
   .gift-guide__hero {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+    position: relative;
+    overflow: hidden;
+    min-height: 52rem;
   }
 
-  .gift-guide__hero-grid {
+  .gift-guide__hero-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 58%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .gift-guide__hero-bg img,
+  .gift-guide__hero-bg svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    display: block;
+  }
+
+  .gift-guide__hero-fade {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      var(--gift-guide-hero-bg, #ffffff) 0%,
+      var(--gift-guide-hero-bg, #ffffff) 38%,
+      rgba(255, 255, 255, 0.92) 48%,
+      rgba(255, 255, 255, 0) 62%
+    );
+  }
+
+  .gift-guide__hero-inner {
+    position: relative;
+    z-index: 2;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 3.2rem;
-    align-items: stretch;
+    align-items: center;
+    min-height: 52rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
   }
 
   .gift-guide__hero-content {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 56rem;
+    max-width: 52rem;
+    padding-right: 2rem;
   }
 
   .gift-guide__hero-title {
     margin: 0 0 2.4rem;
     font-size: 3.8rem;
-    font-weight: 400;
-    line-height: 1.05;
+    font-weight: 700;
+    line-height: 1.02;
     letter-spacing: -0.02em;
     color: #121212;
   }
 
   .gift-guide__hero-description {
-    margin: 0 0 3.2rem;
-    font-size: 1.6rem;
-    line-height: 1.6;
-    max-width: 48rem;
+    margin: 0 0 3.6rem;
+    font-size: 1.5rem;
+    line-height: 1.65;
+    max-width: 44rem;
+    color: #121212;
   }
 
-  .gift-guide__hero-media {
+  .gift-guide__announcement {
     position: relative;
-    overflow: hidden;
-    min-height: 28rem;
-    border: 1px solid rgba(18, 18, 18, 0.12);
-    border-radius: 0.2rem;
+    z-index: 3;
+    background-color: var(--gift-guide-announcement-bg, #ffffff);
+    color: var(--gift-guide-announcement-text, #121212);
+    border-top: 1px solid rgba(18, 18, 18, 0.12);
   }
 
-  .gift-guide__hero-media-inner {
-    position: absolute;
-    inset: 0;
-  }
-
-  .gift-guide__hero-media img,
-  .gift-guide__hero-media svg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
+  .gift-guide__announcement-text {
+    margin: 0;
+    padding: 1.2rem 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-align: center;
+    text-transform: uppercase;
   }
 
   .gift-guide__button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 4.8rem;
-    padding: 1.2rem 3.2rem;
+    gap: 0.8rem;
+    min-height: 4.4rem;
+    padding: 1rem 2.4rem;
     border: 1px solid transparent;
-    border-radius: 0.4rem;
-    background-color: var(--gift-guide-cta-bg, #f5eb3b);
-    color: var(--gift-guide-cta-text, #121212);
-    font-size: 1.4rem;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    border-radius: 0.3rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-decoration: none;
     text-transform: uppercase;
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     cursor: pointer;
+    white-space: nowrap;
   }
 
-  .gift-guide__button:hover,
-  .gift-guide__button:focus-visible {
+  .gift-guide__button-arrow {
+    font-size: 1.4rem;
+    line-height: 1;
+    transition: transform 0.3s ease;
+  }
+
+  .gift-guide__button:hover .gift-guide__button-arrow,
+  .gift-guide__button:focus-visible .gift-guide__button-arrow {
+    transform: translateX(0.3rem);
+  }
+
+  .gift-guide__button--top {
+    background-color: var(--gift-guide-cta-bg, #fff44f);
+    color: var(--gift-guide-cta-text, #121212);
+    border-color: var(--gift-guide-cta-bg, #fff44f);
+  }
+
+  .gift-guide__button--top:hover,
+  .gift-guide__button--top:focus-visible {
     background-color: #121212;
     color: #ffffff;
+    border-color: #121212;
+  }
+
+  .gift-guide__button--hero {
+    background-color: var(--gift-guide-hero-btn-bg, #121212);
+    color: var(--gift-guide-hero-btn-text, #ffffff);
+    border-color: var(--gift-guide-hero-btn-bg, #121212);
+    min-height: 4.8rem;
+    padding: 1.2rem 3rem;
+    font-size: 1.3rem;
+  }
+
+  .gift-guide__button--hero:hover,
+  .gift-guide__button--hero:focus-visible {
+    background-color: #ffffff;
+    color: #121212;
     border-color: #121212;
   }
 
@@ -309,21 +376,13 @@
     }
 
     .gift-guide__top-text {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
 
-    .gift-guide__hero {
+    .gift-guide__hero-inner {
+      grid-template-columns: 1fr 1fr;
       padding-top: 5.6rem;
       padding-bottom: 5.6rem;
-    }
-
-    .gift-guide__hero-grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 4.8rem;
-    }
-
-    .gift-guide__hero-media {
-      min-height: 100%;
     }
 
     .gift-guide__grid {
@@ -340,13 +399,18 @@
       font-size: 4.8rem;
     }
 
-    .gift-guide__hero {
-      padding-top: 7.2rem;
-      padding-bottom: 7.2rem;
+    .gift-guide__hero,
+    .gift-guide__hero-inner {
+      min-height: 58rem;
     }
 
-    .gift-guide__hero-grid {
-      gap: 6.4rem;
+    .gift-guide__hero-inner {
+      padding-top: 6.4rem;
+      padding-bottom: 6.4rem;
+    }
+
+    .gift-guide__hero-bg {
+      width: 55%;
     }
 
     .gift-guide__grid {
@@ -368,9 +432,40 @@
       justify-self: center;
     }
 
+    .gift-guide__hero {
+      display: flex;
+      flex-direction: column;
+      min-height: auto;
+    }
+
+    .gift-guide__hero-bg {
+      position: relative;
+      width: 100%;
+      height: 28rem;
+      order: 2;
+    }
+
+    .gift-guide__hero-fade {
+      display: none;
+    }
+
+    .gift-guide__hero-inner {
+      order: 1;
+      min-height: auto;
+      padding-top: 3.2rem;
+      padding-bottom: 0;
+    }
+
+    .gift-guide__hero-content {
+      padding-right: 0;
+      padding-bottom: 3.2rem;
+    }
+
     .gift-guide__announcement-text {
-      font-size: 1rem;
-      letter-spacing: 0.1em;
+      font-size: 0.9rem;
+      letter-spacing: 0.08em;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
     }
   }
 
@@ -394,68 +489,107 @@
   class="gift-guide"
   aria-labelledby="GiftGuideHeading-{{ section.id }}"
 >
-  <header class="gift-guide__top-bar">
-    <div class="page-width gift-guide__top-bar-inner">
-      <div class="gift-guide__logo">
-        {%- if section.settings.logo_image != blank -%}
-          <a
-            href="{{ routes.root_url }}"
-            class="gift-guide__logo-link"
-            {% if section.settings.logo_image.alt != blank %}
-              aria-label="{{ section.settings.logo_image.alt | escape }}"
-            {% else %}
-              aria-label="{{ shop.name | escape }}"
-            {% endif %}
-          >
-            {{
-              section.settings.logo_image
-              | image_url: width: 400
-              | image_tag:
-                widths: '100, 150, 200, 300, 400',
-                sizes: '140px',
-                loading: 'lazy',
-                alt: section.settings.logo_image.alt
-            }}
-          </a>
+  <div class="gift-guide__header">
+    <header class="gift-guide__top-bar">
+      <div class="page-width gift-guide__top-bar-inner">
+        <div class="gift-guide__logo">
+          {%- if section.settings.logo_image != blank -%}
+            <a
+              href="{{ routes.root_url }}"
+              class="gift-guide__logo-link"
+              {% if section.settings.logo_image.alt != blank %}
+                aria-label="{{ section.settings.logo_image.alt | escape }}"
+              {% else %}
+                aria-label="{{ shop.name | escape }}"
+              {% endif %}
+            >
+              {{
+                section.settings.logo_image
+                | image_url: width: 400
+                | image_tag:
+                  widths: '100, 150, 200, 300, 400',
+                  sizes: '140px',
+                  loading: 'lazy',
+                  alt: section.settings.logo_image.alt
+              }}
+            </a>
+          {%- else -%}
+            <a href="{{ routes.root_url }}" class="gift-guide__logo-text">
+              {%- if section.settings.logo_text != blank -%}
+                {{ section.settings.logo_text | escape }}
+              {%- else -%}
+                {{ shop.name | escape }}
+              {%- endif -%}
+            </a>
+          {%- endif -%}
+        </div>
+
+        {%- if section.settings.top_center_text != blank -%}
+          <p class="gift-guide__top-text">{{ section.settings.top_center_text | escape }}</p>
+        {%- endif -%}
+
+        <div class="gift-guide__top-cta-wrap">
+          {%- if section.settings.top_cta_text != blank -%}
+            <a
+              {% if section.settings.top_cta_link == blank %}
+                role="link" aria-disabled="true"
+              {% else %}
+                href="{{ section.settings.top_cta_link }}"
+              {% endif %}
+              class="gift-guide__button gift-guide__button--top"
+            >
+              <span>{{ section.settings.top_cta_text | escape }}</span>
+              <span class="gift-guide__button-arrow" aria-hidden="true">&rarr;</span>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </header>
+
+    <div class="gift-guide__hero">
+      <div class="gift-guide__hero-bg" aria-hidden="true">
+        {%- if section.settings.hero_image != blank -%}
+          {%- liquid
+            assign hero_alt = section.settings.hero_image.alt
+            if section.settings.hero_image_alt != blank
+              assign hero_alt = section.settings.hero_image_alt
+            endif
+          -%}
+          {%- assign hero_widths = '550, 750, 900, 1100, 1500, 1780, 2000, 2500, 3000' -%}
+          {%- capture hero_sizes -%}
+            (min-width: 990px) 55vw,
+            (min-width: 750px) 58vw,
+            100vw
+          {%- endcapture -%}
+          {{
+            section.settings.hero_image
+            | image_url: width: 3000
+            | image_tag:
+              widths: hero_widths,
+              sizes: hero_sizes,
+              loading: hero_loading,
+              fetchpriority: fetch_priority,
+              alt: hero_alt,
+              class: 'gift-guide__hero-image'
+          }}
         {%- else -%}
-          <a href="{{ routes.root_url }}" class="gift-guide__logo-text">
-            {{ shop.name | escape }}
-          </a>
-        {%- endif -%}
-      </div>
-
-      {%- if section.settings.top_center_text != blank -%}
-        <p class="gift-guide__top-text">{{ section.settings.top_center_text | escape }}</p>
-      {%- endif -%}
-
-      <div class="gift-guide__top-cta-wrap">
-        {%- if section.settings.top_cta_text != blank -%}
-          <a
-            {% if section.settings.top_cta_link == blank %}
-              role="link" aria-disabled="true"
-            {% else %}
-              href="{{ section.settings.top_cta_link }}"
+          <img
+            src="{{ 'gift-guide-hero-bg.png' | asset_url }}"
+            alt=""
+            width="1200"
+            height="800"
+            loading="{{ hero_loading }}"
+            {% if fetch_priority == 'high' %}
+              fetchpriority="high"
             {% endif %}
-            class="gift-guide__button gift-guide__button--top"
+            class="gift-guide__hero-image"
           >
-            {{ section.settings.top_cta_text | escape }}
-          </a>
         {%- endif -%}
       </div>
-    </div>
-  </header>
 
-  {%- if section.settings.announcement_text != blank -%}
-    <aside class="gift-guide__announcement" aria-label="Announcement">
-      <div class="page-width">
-        <p class="gift-guide__announcement-text">{{ section.settings.announcement_text | escape }}</p>
-      </div>
-    </aside>
-  {%- endif -%}
+      <div class="gift-guide__hero-fade" aria-hidden="true"></div>
 
-  <div class="gift-guide__hero">
-    <div class="page-width">
-      <div class="gift-guide__hero-grid">
+      <div class="page-width gift-guide__hero-inner">
         <div class="gift-guide__hero-content">
           {%- if section.settings.hero_title != blank -%}
             <h1 id="GiftGuideHeading-{{ section.id }}" class="gift-guide__hero-title">
@@ -477,44 +611,22 @@
                 {% endif %}
                 class="gift-guide__button gift-guide__button--hero"
               >
-                {{ section.settings.hero_button_text | escape }}
+                <span>{{ section.settings.hero_button_text | escape }}</span>
+                <span class="gift-guide__button-arrow" aria-hidden="true">&rarr;</span>
               </a>
             </div>
           {%- endif -%}
         </div>
-
-        <figure class="gift-guide__hero-media">
-          <div class="gift-guide__hero-media-inner">
-            {%- if section.settings.hero_image != blank -%}
-              {%- liquid
-                assign hero_alt = section.settings.hero_image.alt
-                if section.settings.hero_image_alt != blank
-                  assign hero_alt = section.settings.hero_image_alt
-                endif
-              -%}
-              {%- assign hero_widths = '375, 550, 750, 900, 1100, 1500, 1780, 2000' -%}
-              {%- capture hero_sizes -%}
-                (min-width: 990px) calc((100vw - 10rem) / 2),
-                (min-width: 750px) calc((100vw - 8rem) / 2),
-                calc(100vw - 3rem)
-              {%- endcapture -%}
-              {{
-                section.settings.hero_image
-                | image_url: width: 2000
-                | image_tag:
-                  widths: hero_widths,
-                  sizes: hero_sizes,
-                  loading: hero_loading,
-                  fetchpriority: fetch_priority,
-                  alt: hero_alt
-              }}
-            {%- else -%}
-              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
-            {%- endif -%}
-          </div>
-        </figure>
       </div>
     </div>
+
+    {%- if section.settings.announcement_text != blank -%}
+      <aside class="gift-guide__announcement" aria-label="Announcement">
+        <div class="page-width">
+          <p class="gift-guide__announcement-text">{{ section.settings.announcement_text | escape }}</p>
+        </div>
+      </aside>
+    {%- endif -%}
   </div>
 
   {%- if section.settings.gallery_title != blank or section.blocks.size > 0 -%}
@@ -624,6 +736,19 @@
     },
     {
       "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "TISSO VISON",
+      "info": "Shown when no logo image is uploaded."
+    },
+    {
+      "type": "color",
+      "id": "top_bar_background_color",
+      "label": "Top bar background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "text",
       "id": "top_center_text",
       "label": "Center text",
       "default": "Find the ideal gift for your loved ones."
@@ -653,13 +778,13 @@
       "type": "color",
       "id": "announcement_background_color",
       "label": "Background color",
-      "default": "#121212"
+      "default": "#ffffff"
     },
     {
       "type": "color",
       "id": "announcement_text_color",
       "label": "Text color",
-      "default": "#ffffff"
+      "default": "#121212"
     },
     {
       "type": "header",
@@ -779,19 +904,35 @@
     },
     {
       "type": "header",
-      "content": "Buttons"
+      "content": "Top bar button"
     },
     {
       "type": "color",
       "id": "cta_background_color",
       "label": "Button background color",
-      "default": "#f5eb3b"
+      "default": "#fff44f"
     },
     {
       "type": "color",
       "id": "cta_text_color",
       "label": "Button text color",
       "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Hero button"
+    },
+    {
+      "type": "color",
+      "id": "hero_button_background_color",
+      "label": "Button background color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "hero_button_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
     }
   ],
   "blocks": [
