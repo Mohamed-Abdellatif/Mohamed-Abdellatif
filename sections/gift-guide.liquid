@@ -1,0 +1,847 @@
+{%- liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+
+  assign hero_loading = 'lazy'
+  if section.index == 1
+    assign hero_loading = 'eager'
+  endif
+
+  assign grid_spacing = section.settings.grid_spacing
+  assign aspect_ratio = section.settings.image_aspect_ratio
+  assign overlay_opacity = section.settings.hover_overlay_opacity | divided_by: 100.0
+-%}
+
+{%- style -%}
+  #GiftGuide-{{ section.id }} {
+    --gift-guide-hero-bg: {{ section.settings.hero_background_color }};
+    --gift-guide-hero-text: {{ section.settings.hero_text_color }};
+    --gift-guide-announcement-bg: {{ section.settings.announcement_background_color }};
+    --gift-guide-announcement-text: {{ section.settings.announcement_text_color }};
+    --gift-guide-cta-bg: {{ section.settings.cta_background_color }};
+    --gift-guide-cta-text: {{ section.settings.cta_text_color }};
+    --gift-guide-overlay: {{ section.settings.hover_overlay_color }};
+    --gift-guide-overlay-opacity: {{ overlay_opacity }};
+    --gift-guide-plus-color: {{ section.settings.plus_icon_color }};
+    --gift-guide-grid-gap: {{ grid_spacing }}px;
+    --gift-guide-aspect-ratio: {{ aspect_ratio }};
+  }
+{%- endstyle -%}
+
+{% stylesheet %}
+  .gift-guide {
+    background-color: var(--gift-guide-hero-bg, #ffffff);
+    color: var(--gift-guide-hero-text, #121212);
+  }
+
+  .gift-guide__top-bar {
+    border-bottom: 1px solid rgba(18, 18, 18, 0.12);
+  }
+
+  .gift-guide__top-bar-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1.6rem;
+    min-height: 7rem;
+    padding-top: 1.6rem;
+    padding-bottom: 1.6rem;
+  }
+
+  .gift-guide__logo {
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    max-width: 14rem;
+  }
+
+  .gift-guide__logo-link {
+    display: block;
+    line-height: 0;
+    text-decoration: none;
+  }
+
+  .gift-guide__logo img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 4.8rem;
+    object-fit: contain;
+  }
+
+  .gift-guide__logo-text {
+    font-size: 1.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .gift-guide__top-text {
+    margin: 0;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  .gift-guide__top-cta-wrap {
+    justify-self: end;
+  }
+
+  .gift-guide__announcement {
+    background-color: var(--gift-guide-announcement-bg, #121212);
+    color: var(--gift-guide-announcement-text, #ffffff);
+    border-bottom: 1px solid rgba(18, 18, 18, 0.12);
+  }
+
+  .gift-guide__announcement-text {
+    margin: 0;
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .gift-guide__hero {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .gift-guide__hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3.2rem;
+    align-items: stretch;
+  }
+
+  .gift-guide__hero-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 56rem;
+  }
+
+  .gift-guide__hero-title {
+    margin: 0 0 2.4rem;
+    font-size: 3.8rem;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #121212;
+  }
+
+  .gift-guide__hero-description {
+    margin: 0 0 3.2rem;
+    font-size: 1.6rem;
+    line-height: 1.6;
+    max-width: 48rem;
+  }
+
+  .gift-guide__hero-media {
+    position: relative;
+    overflow: hidden;
+    min-height: 28rem;
+    border: 1px solid rgba(18, 18, 18, 0.12);
+    border-radius: 0.2rem;
+  }
+
+  .gift-guide__hero-media-inner {
+    position: absolute;
+    inset: 0;
+  }
+
+  .gift-guide__hero-media img,
+  .gift-guide__hero-media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .gift-guide__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 4.8rem;
+    padding: 1.2rem 3.2rem;
+    border: 1px solid transparent;
+    border-radius: 0.4rem;
+    background-color: var(--gift-guide-cta-bg, #f5eb3b);
+    color: var(--gift-guide-cta-text, #121212);
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .gift-guide__button:hover,
+  .gift-guide__button:focus-visible {
+    background-color: #121212;
+    color: #ffffff;
+    border-color: #121212;
+  }
+
+  .gift-guide__button:focus-visible {
+    outline: 0.2rem solid #121212;
+    outline-offset: 0.2rem;
+  }
+
+  .gift-guide__gallery {
+    padding-top: 6rem;
+    padding-bottom: 8rem;
+  }
+
+  .gift-guide__gallery-title {
+    margin: 0 0 4.8rem;
+    font-size: 3.2rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #121212;
+    text-align: center;
+  }
+
+  .gift-guide__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gift-guide-grid-gap, 16px);
+  }
+
+  .gift-guide__card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.2rem;
+    border: 1px solid rgba(18, 18, 18, 0.08);
+  }
+
+  .gift-guide__card-link {
+    display: block;
+    position: relative;
+    text-decoration: none;
+    color: inherit;
+    aspect-ratio: var(--gift-guide-aspect-ratio, 1);
+    overflow: hidden;
+  }
+
+  .gift-guide__card-link:focus-visible {
+    outline: 0.2rem solid #121212;
+    outline-offset: 0.2rem;
+  }
+
+  .gift-guide__card-media {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.45s ease;
+  }
+
+  .gift-guide__card-media img,
+  .gift-guide__card-media svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+
+  .gift-guide__card-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--gift-guide-overlay, #121212);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+
+  .gift-guide__card-plus {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.6rem;
+    height: 5.6rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: var(--gift-guide-plus-color, #ffffff);
+    transform: scale(0.92);
+    transition: transform 0.35s ease;
+  }
+
+  .gift-guide__card-plus svg {
+    width: 2rem;
+    height: 2rem;
+    stroke: currentColor;
+    fill: none;
+  }
+
+  .gift-guide__card-link:hover .gift-guide__card-media,
+  .gift-guide__card-link:focus-visible .gift-guide__card-media {
+    transform: scale(1.06);
+  }
+
+  .gift-guide__card-link:hover .gift-guide__card-overlay,
+  .gift-guide__card-link:focus-visible .gift-guide__card-overlay {
+    opacity: var(--gift-guide-overlay-opacity, 0.45);
+  }
+
+  .gift-guide__card-link:hover .gift-guide__card-plus,
+  .gift-guide__card-link:focus-visible .gift-guide__card-plus {
+    transform: scale(1);
+  }
+
+  @media screen and (min-width: 750px) {
+    .gift-guide__hero-title {
+      font-size: 5.6rem;
+    }
+
+    .gift-guide__gallery-title {
+      font-size: 4rem;
+    }
+
+    .gift-guide__top-text {
+      font-size: 1.5rem;
+    }
+
+    .gift-guide__hero {
+      padding-top: 5.6rem;
+      padding-bottom: 5.6rem;
+    }
+
+    .gift-guide__hero-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 4.8rem;
+    }
+
+    .gift-guide__hero-media {
+      min-height: 100%;
+    }
+
+    .gift-guide__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .gift-guide__hero-title {
+      font-size: 7.2rem;
+    }
+
+    .gift-guide__gallery-title {
+      font-size: 4.8rem;
+    }
+
+    .gift-guide__hero {
+      padding-top: 7.2rem;
+      padding-bottom: 7.2rem;
+    }
+
+    .gift-guide__hero-grid {
+      gap: 6.4rem;
+    }
+
+    .gift-guide__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media screen and (max-width: 749px) {
+    .gift-guide__top-bar-inner {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      gap: 1.2rem;
+      min-height: auto;
+    }
+
+    .gift-guide__logo,
+    .gift-guide__top-cta-wrap {
+      justify-self: center;
+    }
+
+    .gift-guide__announcement-text {
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gift-guide__button,
+    .gift-guide__card-media,
+    .gift-guide__card-overlay,
+    .gift-guide__card-plus {
+      transition: none;
+    }
+
+    .gift-guide__card-link:hover .gift-guide__card-media,
+    .gift-guide__card-link:focus-visible .gift-guide__card-media {
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+<section
+  id="GiftGuide-{{ section.id }}"
+  class="gift-guide"
+  aria-labelledby="GiftGuideHeading-{{ section.id }}"
+>
+  <header class="gift-guide__top-bar">
+    <div class="page-width gift-guide__top-bar-inner">
+      <div class="gift-guide__logo">
+        {%- if section.settings.logo_image != blank -%}
+          <a
+            href="{{ routes.root_url }}"
+            class="gift-guide__logo-link"
+            {% if section.settings.logo_image.alt != blank %}
+              aria-label="{{ section.settings.logo_image.alt | escape }}"
+            {% else %}
+              aria-label="{{ shop.name | escape }}"
+            {% endif %}
+          >
+            {{
+              section.settings.logo_image
+              | image_url: width: 400
+              | image_tag:
+                widths: '100, 150, 200, 300, 400',
+                sizes: '140px',
+                loading: 'lazy',
+                alt: section.settings.logo_image.alt
+            }}
+          </a>
+        {%- else -%}
+          <a href="{{ routes.root_url }}" class="gift-guide__logo-text">
+            {{ shop.name | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.top_center_text != blank -%}
+        <p class="gift-guide__top-text">{{ section.settings.top_center_text | escape }}</p>
+      {%- endif -%}
+
+      <div class="gift-guide__top-cta-wrap">
+        {%- if section.settings.top_cta_text != blank -%}
+          <a
+            {% if section.settings.top_cta_link == blank %}
+              role="link" aria-disabled="true"
+            {% else %}
+              href="{{ section.settings.top_cta_link }}"
+            {% endif %}
+            class="gift-guide__button gift-guide__button--top"
+          >
+            {{ section.settings.top_cta_text | escape }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </header>
+
+  {%- if section.settings.announcement_text != blank -%}
+    <aside class="gift-guide__announcement" aria-label="Announcement">
+      <div class="page-width">
+        <p class="gift-guide__announcement-text">{{ section.settings.announcement_text | escape }}</p>
+      </div>
+    </aside>
+  {%- endif -%}
+
+  <div class="gift-guide__hero">
+    <div class="page-width">
+      <div class="gift-guide__hero-grid">
+        <div class="gift-guide__hero-content">
+          {%- if section.settings.hero_title != blank -%}
+            <h1 id="GiftGuideHeading-{{ section.id }}" class="gift-guide__hero-title">
+              {{ section.settings.hero_title | escape }}
+            </h1>
+          {%- endif -%}
+
+          {%- if section.settings.hero_description != blank -%}
+            <p class="gift-guide__hero-description">{{ section.settings.hero_description | escape }}</p>
+          {%- endif -%}
+
+          {%- if section.settings.hero_button_text != blank -%}
+            <div class="gift-guide__hero-cta">
+              <a
+                {% if section.settings.hero_button_url == blank %}
+                  role="link" aria-disabled="true"
+                {% else %}
+                  href="{{ section.settings.hero_button_url }}"
+                {% endif %}
+                class="gift-guide__button gift-guide__button--hero"
+              >
+                {{ section.settings.hero_button_text | escape }}
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <figure class="gift-guide__hero-media">
+          <div class="gift-guide__hero-media-inner">
+            {%- if section.settings.hero_image != blank -%}
+              {%- liquid
+                assign hero_alt = section.settings.hero_image.alt
+                if section.settings.hero_image_alt != blank
+                  assign hero_alt = section.settings.hero_image_alt
+                endif
+              -%}
+              {%- assign hero_widths = '375, 550, 750, 900, 1100, 1500, 1780, 2000' -%}
+              {%- capture hero_sizes -%}
+                (min-width: 990px) calc((100vw - 10rem) / 2),
+                (min-width: 750px) calc((100vw - 8rem) / 2),
+                calc(100vw - 3rem)
+              {%- endcapture -%}
+              {{
+                section.settings.hero_image
+                | image_url: width: 2000
+                | image_tag:
+                  widths: hero_widths,
+                  sizes: hero_sizes,
+                  loading: hero_loading,
+                  fetchpriority: fetch_priority,
+                  alt: hero_alt
+              }}
+            {%- else -%}
+              {{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            {%- endif -%}
+          </div>
+        </figure>
+      </div>
+    </div>
+  </div>
+
+  {%- if section.settings.gallery_title != blank or section.blocks.size > 0 -%}
+    <div class="gift-guide__gallery">
+      <div class="page-width">
+        {%- if section.settings.gallery_title != blank -%}
+          <h2 class="gift-guide__gallery-title">{{ section.settings.gallery_title | escape }}</h2>
+        {%- endif -%}
+
+        {%- if section.blocks.size > 0 -%}
+          <div class="gift-guide__grid" role="list">
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'gallery_image' -%}
+                {%- assign placeholder_image_index = forloop.index0 | modulo: 4 | plus: 1 -%}
+                <article class="gift-guide__card" role="listitem" {{ block.shopify_attributes }}>
+                  {%- if block.settings.image != blank -%}
+                    {%- assign gallery_widths = '165, 360, 535, 750, 900, 1100, 1500' -%}
+                    {%- capture gallery_sizes -%}
+                      (min-width: 990px) calc((100vw - 10rem) / 3),
+                      (min-width: 750px) calc((100vw - 8rem) / 2),
+                      calc(100vw - 3rem)
+                    {%- endcapture -%}
+                    {%- capture gallery_alt -%}
+                      {%- if block.settings.alt_text != blank -%}
+                        {{ block.settings.alt_text | escape }}
+                      {%- else -%}
+                        {{ block.settings.image.alt | escape }}
+                      {%- endif -%}
+                    {%- endcapture -%}
+
+                    {%- if block.settings.link != blank -%}
+                      <a
+                        href="{{ block.settings.link }}"
+                        class="gift-guide__card-link"
+                        aria-label="{{ gallery_alt }}"
+                      >
+                    {%- else -%}
+                      <div class="gift-guide__card-link" role="img" aria-label="{{ gallery_alt }}">
+                    {%- endif -%}
+
+                    <div class="gift-guide__card-media">
+                      {{
+                        block.settings.image
+                        | image_url: width: 1500
+                        | image_tag:
+                          widths: gallery_widths,
+                          sizes: gallery_sizes,
+                          loading: 'lazy',
+                          alt: gallery_alt
+                      }}
+                    </div>
+
+                    <span class="gift-guide__card-overlay" aria-hidden="true">
+                      <span class="gift-guide__card-plus">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                          <path d="M10 4v12M4 10h12" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                      </span>
+                    </span>
+
+                    {%- if block.settings.link != blank -%}
+                      </a>
+                    {%- else -%}
+                      </div>
+                    {%- endif -%}
+                  {%- else -%}
+                    <div class="gift-guide__card-link" role="img" aria-label="Placeholder image">
+                      <div class="gift-guide__card-media">
+                        {{ 'detailed-apparel-' | append: placeholder_image_index | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                      <span class="gift-guide__card-overlay" aria-hidden="true">
+                        <span class="gift-guide__card-plus">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+                            <path d="M10 4v12M4 10h12" stroke-width="1.5" stroke-linecap="round"/>
+                          </svg>
+                        </span>
+                      </span>
+                    </div>
+                  {%- endif -%}
+                </article>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Gift Guide",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Top bar"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "top_center_text",
+      "label": "Center text",
+      "default": "Find the ideal gift for your loved ones."
+    },
+    {
+      "type": "text",
+      "id": "top_cta_text",
+      "label": "CTA text",
+      "default": "Choose Gift"
+    },
+    {
+      "type": "url",
+      "id": "top_cta_link",
+      "label": "CTA link"
+    },
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "text",
+      "id": "announcement_text",
+      "label": "Text",
+      "default": "SUSTAINABLE, ETHICALLY MADE CLOTHES IN SIZES XXS TO 6XL"
+    },
+    {
+      "type": "color",
+      "id": "announcement_background_color",
+      "label": "Background color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "announcement_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "text",
+      "id": "hero_title",
+      "label": "Title",
+      "default": "The Gift Guide"
+    },
+    {
+      "type": "textarea",
+      "id": "hero_description",
+      "label": "Description",
+      "default": "Discover Joy: Your Ultimate Holiday Gift Destination. Explore our curated selection and find the perfect gifts to delight your loved ones this holiday season."
+    },
+    {
+      "type": "text",
+      "id": "hero_button_text",
+      "label": "Button text",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "hero_button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "hero_image_alt",
+      "label": "Hero image alt text",
+      "info": "Describe the hero image for accessibility. Falls back to the image alt text if empty."
+    },
+    {
+      "type": "color",
+      "id": "hero_background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "hero_text_color",
+      "label": "Text color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "text",
+      "id": "gallery_title",
+      "label": "Section title",
+      "default": "Tisso vison in the wild"
+    },
+    {
+      "type": "range",
+      "id": "grid_spacing",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Grid spacing",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "1",
+          "label": "Square (1:1)"
+        },
+        {
+          "value": "4 / 5",
+          "label": "Portrait (4:5)"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait (3:4)"
+        },
+        {
+          "value": "16 / 9",
+          "label": "Landscape (16:9)"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "color",
+      "id": "hover_overlay_color",
+      "label": "Hover overlay color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "hover_overlay_opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Hover overlay opacity",
+      "default": 45
+    },
+    {
+      "type": "color",
+      "id": "plus_icon_color",
+      "label": "Plus icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "color",
+      "id": "cta_background_color",
+      "label": "Button background color",
+      "default": "#f5eb3b"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "Button text color",
+      "default": "#121212"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "gallery_image",
+      "name": "Gallery image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt text",
+          "info": "Describe the image for accessibility. Falls back to the image alt text if empty."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gift Guide",
+      "blocks": [
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        },
+        {
+          "type": "gallery_image"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
